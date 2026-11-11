@@ -1452,6 +1452,413 @@ p {
 }
 
 /* ==========================================================================
+   DEVICE MOCKUPS  (project cards)
+   ========================================================================== */
+.project-card--device {
+  position: relative;
+  overflow: hidden;
+}
+
+/* amber-to-transparent border glow, brighter on hover */
+.project-card--device::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    155deg,
+    rgba(232, 163, 23, 0.5),
+    rgba(232, 163, 23, 0.08) 42%,
+    transparent 72%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0.45;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.project-card--device:hover::before,
+.project-card--device:focus-within::before {
+  opacity: 1;
+}
+
+.project-stage,
+.project-media--device {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 90% at 50% 0%, rgba(232, 163, 23, 0.07), transparent 65%),
+    linear-gradient(180deg, #0e0e10 0%, #0a0a0b 78%);
+}
+
+.project-stage {
+  padding: clamp(26px, 4vw, 38px) clamp(16px, 4vw, 26px);
+}
+
+.project-media--device {
+  padding: clamp(22px, 4vw, 36px);
+}
+
+/* ---- the phone ---- */
+.device-wrap {
+  animation: device-float 6s ease-in-out infinite;
+}
+
+.device {
+  position: relative;
+  width: var(--phone-w, 280px);
+  max-width: 100%;
+  aspect-ratio: var(--phone-ratio, 280 / 580);
+  padding: 8px;
+  border-radius: 40px;
+  background: linear-gradient(160deg, #232327 0%, #101013 45%, #1a1a1e 100%);
+  box-shadow:
+    0 0 0 1px #303035,
+    0 26px 60px -26px rgba(0, 0, 0, 0.95),
+    0 0 70px -24px rgba(232, 163, 23, 0.3);
+  transition:
+    transform 0.4s var(--ease),
+    filter 0.4s var(--ease);
+}
+
+.device-landscape {
+  --phone-w: 640px;
+  --phone-ratio: 640 / 300;
+  padding: 7px;
+  border-radius: 30px;
+}
+
+.device-frame {
+  position: relative;
+  height: 100%;
+  border-radius: 33px;
+  overflow: hidden;
+  background: #050506;
+}
+
+.device-landscape .device-frame {
+  border-radius: 24px;
+}
+
+.device-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #08080a;
+}
+
+.device-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 3;
+  width: 76px;
+  height: 20px;
+  transform: translateX(-50%);
+  border-radius: 12px;
+  background: #050506;
+}
+
+.device-landscape .device-island {
+  top: 50%;
+  left: 10px;
+  width: 20px;
+  height: 54px;
+  transform: translateY(-50%);
+}
+
+.device-btn {
+  position: absolute;
+  border-radius: 2px;
+  background: #2b2b31;
+}
+
+.device-btn--volume {
+  top: 22%;
+  right: -2px;
+  width: 3px;
+  height: 46px;
+}
+
+.device-btn--power {
+  top: 36%;
+  right: -2px;
+  width: 3px;
+  height: 30px;
+}
+
+.device-landscape .device-btn--volume {
+  top: auto;
+  right: auto;
+  bottom: -2px;
+  left: 18%;
+  width: 46px;
+  height: 3px;
+}
+
+.device-landscape .device-btn--power {
+  top: auto;
+  right: auto;
+  bottom: -2px;
+  left: 31%;
+  width: 30px;
+  height: 3px;
+}
+
+/* screenshot behind the live app */
+.device-shot {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.device-shot img,
+.device-shot svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.device-live {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #08080a;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease);
+}
+
+.device-live.is-loaded {
+  opacity: 1;
+}
+
+/* the featured game is playable straight away */
+.project-card--playable .device-live {
+  pointer-events: auto;
+}
+
+/* ---- hover / tap state ---- */
+@media (hover: hover) {
+  .project-card--device:hover .device {
+    filter: brightness(0.35);
+    transform: scale(0.97);
+  }
+
+  .project-card--device:hover .device-wrap {
+    animation-play-state: paused;
+  }
+}
+
+.project-card--device.is-open .device {
+  filter: brightness(0.35);
+  transform: scale(0.97);
+}
+
+.project-card--device.is-playing .device,
+.project-card--device.is-playing:hover .device,
+.project-card--playable:hover .device {
+  filter: none;
+  transform: none;
+}
+
+/* ---- reveal-on-hover panel ---- */
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(20px, 4vw, 28px);
+  background: linear-gradient(180deg, rgba(10, 10, 11, 0.72), rgba(10, 10, 11, 0.94));
+  opacity: 0;
+  visibility: hidden;
+  overflow: auto;
+  transition:
+    opacity 0.4s var(--ease),
+    visibility 0.4s var(--ease);
+}
+
+.overlay-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  transform: translateY(14px);
+  transition: transform 0.4s var(--ease);
+}
+
+.project-card--device:hover .project-overlay,
+.project-card--device:focus-within .project-overlay,
+.project-card--device.is-open .project-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.project-card--device:hover .overlay-inner,
+.project-card--device:focus-within .overlay-inner,
+.project-card--device.is-open .overlay-inner {
+  transform: none;
+}
+
+.project-card--device.is-playing .project-overlay {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.overlay-inner .project-summary {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
+
+.overlay-inner .tag-list {
+  margin-bottom: 0;
+  gap: 6px;
+}
+
+.overlay-inner .tag-list li {
+  font-size: 0.64rem;
+}
+
+.overlay-inner .project-actions {
+  margin-top: 2px;
+  gap: 8px;
+}
+
+.overlay-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(10, 10, 11, 0.85);
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+
+.overlay-close:hover {
+  border-color: var(--text-faint);
+  color: var(--text);
+}
+
+.device-exit {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 6;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: rgba(10, 10, 11, 0.9);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.device-exit:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+
+.device-exit[hidden] {
+  display: none;
+}
+
+/* ---- card footer ---- */
+.project-card--device .project-body {
+  padding: 15px clamp(18px, 3vw, 22px) 17px;
+}
+
+.project-card--device .project-title-row {
+  align-items: center;
+  margin-bottom: 0;
+}
+
+@keyframes device-float {
+  0%,
+  100% {
+    transform: translateY(-4px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ---- subtle grain over the page ---- */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@media (max-width: 640px) {
+  .project-card--device {
+    --phone-w: 240px;
+  }
+
+  .project-card--device .project-title-row h3 {
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-wrap {
+    animation: none;
+  }
+
+  .project-card--device:hover .device {
+    transform: none;
+  }
+}
+
+/* the screenshot / placeholder wrapper has to fill the phone screen */
+.device-shot .project-visual {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+}
+
+.device-shot .project-visual svg,
+.device-shot .project-visual img {
+  transform: none;
+}
+
+/* ==========================================================================
    REDUCED MOTION
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {

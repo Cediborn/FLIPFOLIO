@@ -1,13 +1,6 @@
 import { useMemo, useState } from 'react'
 import { categories, projects } from '../data/projects.js'
-import ProjectVisual from './ProjectVisual.jsx'
-
-const statusTone = {
-  Live: 'live',
-  Building: 'building',
-  Prototype: 'prototype',
-  Experiment: 'experiment',
-}
+import ProjectCard from './ProjectCard.jsx'
 
 export default function Projects() {
   const [filter, setFilter] = useState('all')
@@ -50,64 +43,7 @@ export default function Projects() {
 
         <div className="project-grid">
           {visible.map((p, i) => (
-            <article
-              key={p.id}
-              className={`project-card${p.featured ? ' project-card--featured' : ''}`}
-              data-reveal
-              style={{ '--delay': `${Math.min(i, 4) * 60}ms` }}
-            >
-              <div className="project-media">
-                <ProjectVisual project={p} />
-                <span className={`status status-${statusTone[p.status] ?? 'experiment'}`}>
-                  <span className="status-dot" aria-hidden="true" />
-                  {p.status}
-                </span>
-              </div>
-
-              <div className="project-body">
-                <div className="project-title-row">
-                  <h3>{p.name}</h3>
-                  <span className="project-num" aria-hidden="true">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                </div>
-
-                <p className="project-summary">{p.summary}</p>
-
-                <ul className="tag-list">
-                  {p.tags.map((t) => (
-                    <li key={t}>{t}</li>
-                  ))}
-                </ul>
-
-                <div className="project-actions">
-                  {p.liveUrl ? (
-                    <a
-                      className="btn btn-primary btn-sm"
-                      href={p.liveUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      Live Demo <span aria-hidden="true">↗</span>
-                    </a>
-                  ) : (
-                    <span className="btn btn-sm btn-disabled" title="Not public yet">
-                      In progress
-                    </span>
-                  )}
-                  {p.githubUrl && (
-                    <a
-                      className="btn btn-ghost btn-sm"
-                      href={p.githubUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      GitHub <span aria-hidden="true">↗</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </article>
+            <ProjectCard key={p.id} project={p} index={i} delay={Math.min(i, 5) * 100} />
           ))}
         </div>
 
