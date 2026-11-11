@@ -2,6 +2,8 @@
 // PROJECT DATA
 // Everything about the projects shown on the site lives here.
 // To add a project: copy a block, fill it in, pick a `visual` key.
+// Add an `image` block (files live in public/) to show a real screenshot
+// instead of the placeholder SVG.
 // To remove a link you don't have (e.g. no GitHub repo yet): set it to null —
 // the button is hidden automatically.
 // ---------------------------------------------------------------------------
@@ -15,8 +17,8 @@ export const categories = [
 
 export const projects = [
   {
-    id: 'blockout',
-    name: 'BLOCKOUT',
+    id: 'blackout',
+    name: 'BLACKOUT',
     // status: one of 'Live' | 'Building' | 'Prototype' | 'Experiment'
     status: 'Live',
     category: 'game',
@@ -26,6 +28,13 @@ export const projects = [
     liveUrl: 'https://blockout-mauve.vercel.app',
     githubUrl: 'https://github.com/Cediborn/BLOCKOUT',
     visual: 'pitch',
+    image: {
+      src: 'blackout.png',
+      webp: 'blackout.webp',
+      width: 1914,
+      height: 874,
+      alt: 'Screenshot of the Blackout project',
+    },
     featured: true,
   },
   {
@@ -51,6 +60,13 @@ export const projects = [
     liveUrl: 'https://freebuff-two.vercel.app',
     githubUrl: null,
     visual: 'growth',
+    image: {
+      src: 'bambi.png',
+      webp: 'bambi.webp',
+      width: 1890,
+      height: 883,
+      alt: 'Screenshot of the Bambi project',
+    },
   },
   {
     id: 'locallens',
@@ -63,6 +79,13 @@ export const projects = [
     liveUrl: 'https://locallens-tan.vercel.app',
     githubUrl: null,
     visual: 'radius',
+    image: {
+      src: 'localens.png',
+      webp: 'localens.webp',
+      width: 1917,
+      height: 871,
+      alt: 'Screenshot of the LocalLens project',
+    },
   },
   {
     id: 'atlas',

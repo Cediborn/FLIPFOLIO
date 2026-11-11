@@ -22,7 +22,7 @@ export const nav = [
 ]
 
 export const links = {
-  // Derived from the confirmed BLOCKOUT repository URL.
+  // Derived from the confirmed GitHub profile URL.
   github: 'https://github.com/Cediborn',
   // TODO: add your email here to enable the email button, e.g. 'cedi@example.com'
   email: '',

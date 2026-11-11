@@ -57,7 +57,7 @@ export default function Projects() {
               style={{ '--delay': `${Math.min(i, 4) * 60}ms` }}
             >
               <div className="project-media">
-                <ProjectVisual visual={p.visual} />
+                <ProjectVisual project={p} />
                 <span className={`status status-${statusTone[p.status] ?? 'experiment'}`}>
                   <span className="status-dot" aria-hidden="true" />
                   {p.status}

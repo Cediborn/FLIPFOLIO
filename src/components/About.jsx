@@ -11,10 +11,24 @@ export default function About() {
 
         <div className="about-grid">
           <div className="about-main" data-reveal>
-            <p className="about-lead">
-              I&rsquo;m a first-year Computer Science student at the University of Ghana who spends a
-              lot of time turning ideas into working software.
-            </p>
+            <div className="about-intro">
+              <picture className="portrait portrait-about">
+                <source srcSet={`${import.meta.env.BASE_URL}me.webp`} type="image/webp" />
+                <img
+                  src={`${import.meta.env.BASE_URL}me.jpg`}
+                  alt="Portrait of Cedi"
+                  width="512"
+                  height="512"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+
+              <p className="about-lead">
+                I&rsquo;m a first-year Computer Science student at the University of Ghana who spends
+                a lot of time turning ideas into working software.
+              </p>
+            </div>
             <p>
               Most of what I know came from building things I actually wanted to use: a football
               game that plays in the browser, a budgeting tool shaped around student life in Ghana, a

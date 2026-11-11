@@ -2,7 +2,7 @@ import { identity, links } from '../data/site.js'
 
 const LOG = [
   { prompt: '~/cedi', cmd: 'whoami', out: 'cs student · univ. of ghana · level 100' },
-  { prompt: '~/cedi', cmd: 'ls building/', out: 'blockout  balancio  bambi  locallens  atlas' },
+  { prompt: '~/cedi', cmd: 'ls building/', out: 'blackout  balancio  bambi  locallens  atlas' },
   { prompt: '~/cedi', cmd: 'git status', out: 'shipping experiments. breaking things. fixing them.' },
 ]
 
@@ -13,41 +13,55 @@ export default function Hero() {
 
       <div className="container hero-inner">
         <div className="hero-copy">
-          <p className="eyebrow" data-reveal>
-            <span className="eyebrow-dot" aria-hidden="true" />
-            Ghana • Computer Science • Builder
-          </p>
+          <picture className="portrait portrait-hero">
+            <source srcSet={`${import.meta.env.BASE_URL}me.webp`} type="image/webp" />
+            <img
+              src={`${import.meta.env.BASE_URL}me.jpg`}
+              alt="Portrait of Cedi"
+              width="512"
+              height="512"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
 
-          <h1 className="hero-title" data-reveal style={{ '--delay': '60ms' }}>
-            I build things while figuring out <span className="hero-accent">what&rsquo;s possible.</span>
-          </h1>
+          <div className="hero-copy-text">
+            <p className="eyebrow" data-reveal>
+              <span className="eyebrow-dot" aria-hidden="true" />
+              Ghana • Computer Science • Builder
+            </p>
 
-          <p className="hero-lede" data-reveal style={{ '--delay': '140ms' }}>
-            I&rsquo;m {identity.name}, a Computer Science student at the University of Ghana building
-            websites, software, games and experiments with modern development tools.
-          </p>
+            <h1 className="hero-title" data-reveal style={{ '--delay': '60ms' }}>
+              I build things while figuring out <span className="hero-accent">what&rsquo;s possible.</span>
+            </h1>
 
-          <div className="hero-actions" data-reveal style={{ '--delay': '220ms' }}>
-            <a className="btn btn-primary" href="#projects">
-              View Projects
-            </a>
-            <a className="btn btn-ghost" href="#about">
-              About Me
-            </a>
-            <a
-              className="hero-inline-link"
-              href={links.github}
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              GitHub <span aria-hidden="true">↗</span>
-            </a>
+            <p className="hero-lede" data-reveal style={{ '--delay': '140ms' }}>
+              I&rsquo;m {identity.name}, a Computer Science student at the University of Ghana building
+              websites, software, games and experiments with modern development tools.
+            </p>
+
+            <div className="hero-actions" data-reveal style={{ '--delay': '220ms' }}>
+              <a className="btn btn-primary" href="#projects">
+                View Projects
+              </a>
+              <a className="btn btn-ghost" href="#about">
+                About Me
+              </a>
+              <a
+                className="hero-inline-link"
+                href={links.github}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                GitHub <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+
+            <p className="hero-now" data-reveal style={{ '--delay': '300ms' }}>
+              <span className="pulse" aria-hidden="true" />
+              Currently: refining <strong>BLACKOUT</strong> gameplay
+            </p>
           </div>
-
-          <p className="hero-now" data-reveal style={{ '--delay': '300ms' }}>
-            <span className="pulse" aria-hidden="true" />
-            Currently: refining <strong>BLOCKOUT</strong> gameplay
-          </p>
         </div>
 
         <div className="hero-visual" data-reveal style={{ '--delay': '180ms' }} aria-hidden="true">
