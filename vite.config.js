@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // Relative base so the same build works on a domain root and on a
-  // sub-path (GitHub Pages serves this at /LA-PORTFOLIO/). In-page links
+  // sub-path (GitHub Pages serves this at /FLIPFOLIO/). In-page links
   // are hash anchors, so nothing here depends on an absolute path.
   base: './',
   build: {

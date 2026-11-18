@@ -1,31 +1,20 @@
-import { useReveal } from './hooks/useReveal.js'
-import Nav from './components/Nav.jsx'
-import Hero from './components/Hero.jsx'
-import About from './components/About.jsx'
-import Projects from './components/Projects.jsx'
-import Skills from './components/Skills.jsx'
-import Philosophy from './components/Philosophy.jsx'
-import Contact from './components/Contact.jsx'
-import Footer from './components/Footer.jsx'
+import { useCallback, useState } from 'react'
+import Book from './components/book/Book.jsx'
+import PlainSite from './components/PlainSite.jsx'
 
 export default function App() {
-  useReveal()
+  const [plain, setPlain] = useState(false)
 
-  return (
-    <>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <Nav />
-      <main id="main">
-        <Hero />
-        <About />
-        <Projects />
-        <Skills />
-        <Philosophy />
-        <Contact />
-      </main>
-      <Footer />
-    </>
-  )
+  const showPlain = useCallback(() => {
+    // Drop any spread hash so the scrolling layout doesn't jump to a section.
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search)
+    }
+    setPlain(true)
+    window.scrollTo({ top: 0 })
+  }, [])
+
+  const showBook = useCallback(() => setPlain(false), [])
+
+  return plain ? <PlainSite onShowBook={showBook} /> : <Book onShowPlain={showPlain} />
 }
