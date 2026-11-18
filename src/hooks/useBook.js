@@ -141,6 +141,19 @@ export function useBook() {
       const to = Math.max(0, Math.min(maxSpread, target))
       const from = state.current.flipped
 
+      // A chapter jump is a new history entry, so Back returns to the spread
+      // you jumped from. Jumps triggered by Back/Forward must not push again.
+      if (!options.fromHistory && to !== from) {
+        const hash = `#${spreadIds[to]}`
+        if (window.location.hash !== hash) {
+          try {
+            window.history.pushState(null, '', hash)
+          } catch {
+            /* the URL is not writable (file://, sandboxed frame) */
+          }
+        }
+      }
+
       if (options.instant || from === to) {
         setFlipped(to)
         setHalf(halfFor(to))
@@ -181,7 +194,7 @@ export function useBook() {
   useEffect(() => {
     const onHashChange = () => {
       const index = spreadIds.indexOf(window.location.hash.slice(1))
-      if (index >= 0) goto(index)
+      if (index >= 0) goto(index, { fromHistory: true })
     }
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)

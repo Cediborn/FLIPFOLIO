@@ -1,8 +1,57 @@
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+
 const statusTone = {
   Live: 'live',
   Building: 'building',
   Prototype: 'prototype',
   Experiment: 'experiment',
+}
+
+/**
+ * The summary is clamped to a handful of lines. Only when the real copy is
+ * taller than the clamp do we offer "Read more", so nothing is ever hidden
+ * behind a page scrollbar by default.
+ */
+function ProjectSummary({ text }) {
+  const ref = useRef(null)
+  const [expanded, setExpanded] = useState(false)
+  const [clipped, setClipped] = useState(false)
+
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el || expanded) return
+    setClipped(el.scrollHeight - el.clientHeight > 1)
+  }, [expanded, text])
+
+  // Re-measure when the page changes size (window resize, rotate).
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(() => {
+      if (expanded) return
+      setClipped(el.scrollHeight - el.clientHeight > 1)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [expanded])
+
+  return (
+    <>
+      <p ref={ref} className={`project-summary${expanded ? ' is-expanded' : ''}`}>
+        {text}
+      </p>
+      {(clipped || expanded) && (
+        <button
+          type="button"
+          className="summary-more"
+          aria-expanded={expanded}
+          onClick={() => setExpanded((open) => !open)}
+        >
+          {expanded ? 'Read less' : 'Read more'}
+        </button>
+      )}
+    </>
+  )
 }
 
 /** Right page of a project spread: name, status, summary, tags, links. */
@@ -19,7 +68,7 @@ export default function ProjectTextPage({ project, number }) {
         {project.status}
       </span>
 
-      <p className="project-summary">{project.summary}</p>
+      <ProjectSummary text={project.summary} />
 
       <ul className="book-tags">
         {project.tags.map((tag) => (

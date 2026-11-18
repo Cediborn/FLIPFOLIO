@@ -1,9 +1,23 @@
 import { identity } from '../../data/site.js'
 
+/**
+ * The board's sheen is a lamp that follows the pointer: every cover tracks
+ * the cursor and moves the highlight with it, so the gloss spreads from where
+ * you touch instead of sitting in one static corner.
+ */
+function trackShine(event) {
+  const rect = event.currentTarget.getBoundingClientRect()
+  if (!rect.width || !rect.height) return
+  const x = ((event.clientX - rect.left) / rect.width) * 100
+  const y = ((event.clientY - rect.top) / rect.height) * 100
+  event.currentTarget.style.setProperty('--shine-x', `${x.toFixed(1)}%`)
+  event.currentTarget.style.setProperty('--shine-y', `${y.toFixed(1)}%`)
+}
+
 /** Closed-book front cover: near-black board with a gold foil title. */
 export function CoverPage() {
   return (
-    <div className="cover-page">
+    <div className="cover-page" onPointerMove={trackShine}>
       <div className="cover-top">
         <span className="cover-rule" aria-hidden="true" />
         <p className="cover-eyebrow">Portfolio</p>
@@ -28,7 +42,7 @@ export function CoverPage() {
 /** Inside of the back board: the left page of the final spread. */
 export function InsideBackCoverPage() {
   return (
-    <div className="cover-page cover-page--inside">
+    <div className="cover-page cover-page--inside" onPointerMove={trackShine}>
       <div className="cover-top">
         <span className="cover-rule" aria-hidden="true" />
       </div>
@@ -48,7 +62,7 @@ export function InsideBackCoverPage() {
 
 export function BackCoverPage({ onClose }) {
   return (
-    <div className="cover-page cover-page--back">
+    <div className="cover-page cover-page--back" onPointerMove={trackShine}>
       <div className="cover-top">
         <span className="cover-rule" aria-hidden="true" />
       </div>

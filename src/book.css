@@ -7,7 +7,7 @@
   --paper-deep: #ece3d1;
   --ink: #191510;
   --ink-soft: #5f5546;
-  --book-w: min(92vw, 1000px, calc((100svh - 220px) * 1.5));
+  --book-w: min(96vw, 1240px, calc((100svh - 170px) * 1.5));
   position: relative;
   z-index: 1;
   min-height: 100svh;
@@ -56,6 +56,8 @@
 }
 
 .book-scene {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
   position: absolute;
   top: 0;
   left: 50%;
@@ -63,6 +65,9 @@
   height: calc(var(--book-w) / 1.5);
   margin-left: calc(var(--book-w) / -2);
   transform-style: preserve-3d;
+  /* pointer tilt on the closed cover; the open/close keyframes take over */
+  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition: transform 0.35s ease-out;
 }
 
 .book-app.is-open .book-scene {
@@ -185,6 +190,43 @@
 }
 
 
+/* sheen that travels across the paper while a leaf is turning */
+.sheet-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 32%,
+    rgba(255, 255, 255, 0.55) 46%,
+    rgba(255, 244, 214, 0.32) 53%,
+    rgba(255, 255, 255, 0) 68%
+  );
+  background-size: 280% 100%;
+  background-position: 120% 0;
+}
+
+.book.is-turning .sheet-face::after {
+  animation: turn-sheen 0.9s cubic-bezier(0.42, 0.04, 0.24, 1);
+}
+
+@keyframes turn-sheen {
+  0% {
+    opacity: 0;
+    background-position: 130% 0;
+  }
+  38% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    background-position: -30% 0;
+  }
+}
+
 /* shadow sweeping under the turning page */
 .turn-shadow {
   position: absolute;
@@ -230,6 +272,10 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  /* thin gold-on-cream scrollbar, and only when the page really overflows */
+  scrollbar-width: thin;
+  scrollbar-color: #c9962a rgba(240, 231, 212, 0.5);
+  scrollbar-gutter: auto;
   padding: clamp(20px, 4.4%, 40px);
   color: var(--ink);
   background-image:
@@ -282,11 +328,31 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.75em;
+  gap: 0.62em;
   min-height: 100%;
-  font-size: clamp(12px, 0.45vw + 9px, 15px);
-  line-height: 1.62;
+  font-size: clamp(13px, 0.42vw + 9.4px, 17px);
+  line-height: 1.55;
   color: var(--ink);
+}
+
+/* the paper scrollbar: gold thumb on a cream track, invisible until needed */
+.page--paper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.page--paper::-webkit-scrollbar-track {
+  background: rgba(240, 231, 212, 0.45);
+  border-radius: 999px;
+}
+
+.page--paper::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: linear-gradient(180deg, #e2b451, #bd8a1c);
+}
+
+.page--paper::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #efc468, #cd981f);
 }
 
 .page-inner--center {
@@ -527,16 +593,21 @@
 
 .page-inner--image {
   justify-content: center;
-  gap: 0.9em;
+  align-items: center;
+  gap: 0.85em;
+  text-align: center;
 }
 
 .project-frame {
   position: relative;
-  border-radius: 5px;
-  padding: 6px;
+  width: 96%;
+  max-width: 100%;
+  border-radius: 8px;
+  padding: 7px;
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(212, 196, 164, 0.42));
   box-shadow:
-    0 14px 34px rgba(56, 40, 12, 0.26),
+    0 18px 40px rgba(56, 40, 12, 0.3),
+    0 4px 10px rgba(56, 40, 12, 0.16),
     0 0 0 1px rgba(120, 96, 52, 0.16);
 }
 
@@ -544,24 +615,27 @@
 .project-frame svg {
   display: block;
   width: 100%;
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .project-frame img {
+  display: block;
   width: 100%;
   height: auto;
-  max-height: 42svh;
-  object-fit: cover;
-  border-radius: 3px;
+  max-height: 52svh;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #0d0d10;
 }
 
 .project-caption {
   display: flex;
+  justify-content: center;
   align-items: baseline;
   gap: 0.55em;
   font-family: var(--font-mono);
-  font-size: 0.7em;
+  font-size: max(12px, 0.72em);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #8c7c5f;
@@ -624,6 +698,42 @@
 
 .project-summary {
   color: #3b3427;
+  line-height: 1.52;
+  /* clamps only if the copy is too long for the page; "Read more" uncovers it */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 8;
+  line-clamp: 8;
+  overflow: hidden;
+}
+
+.project-summary.is-expanded {
+  display: block;
+  -webkit-line-clamp: none;
+  line-clamp: none;
+  overflow: visible;
+}
+
+.summary-more {
+  align-self: flex-start;
+  margin-top: -0.15em;
+  padding: 0.3em 0.85em;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 163, 23, 0.45);
+  background: rgba(232, 163, 23, 0.1);
+  color: #7c530a;
+  font-family: var(--font-mono);
+  font-size: max(12px, 0.72em);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.summary-more:hover,
+.summary-more:focus-visible {
+  background: rgba(232, 163, 23, 0.2);
+  border-color: rgba(232, 163, 23, 0.7);
 }
 
 .book-tags {
@@ -817,11 +927,39 @@
   pointer-events: none;
   background: linear-gradient(
     115deg,
-    transparent 32%,
-    rgba(255, 255, 255, 0.14) 44%,
-    rgba(255, 255, 255, 0.03) 50%,
-    transparent 64%
+    transparent 30%,
+    rgba(255, 255, 255, 0.07) 42%,
+    rgba(255, 255, 255, 0.02) 52%,
+    transparent 66%
   );
+}
+
+/* a lamp that follows the pointer, so the board feels like it is being touched */
+.cover-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background:
+    radial-gradient(
+      34% 38% at var(--shine-x, 50%) var(--shine-y, 12%),
+      rgba(255, 252, 240, 0.34),
+      rgba(255, 244, 214, 0.14) 40%,
+      transparent 72%
+    ),
+    radial-gradient(
+      78% 66% at var(--shine-x, 50%) var(--shine-y, 12%),
+      rgba(232, 163, 23, 0.2),
+      transparent 70%
+    );
+}
+
+.cover-page:hover::before,
+.cover-page:focus-within::before {
+  opacity: 1;
 }
 
 .cover-page > * {
@@ -1008,7 +1146,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px 18px;
-  width: min(100%, 1000px);
+  width: min(100%, 1200px);
   padding-top: 4px;
 }
 
@@ -1130,27 +1268,67 @@
 
   .page--paper {
     padding: clamp(16px, 5.5%, 28px);
-    font-size: clamp(12px, 0.9vw + 9.6px, 14px);
   }
 
   .page-inner {
-    gap: 0.6em;
+    gap: 0.58em;
+    font-size: 13.5px;
+    line-height: 1.55;
   }
 
   .book-portrait {
     width: min(54%, 200px);
   }
 
+  .project-frame {
+    width: 100%;
+  }
+
   .project-frame img {
-    max-height: 34svh;
+    max-height: 38svh;
+  }
+
+  /* no micro-type on phones: nothing below 13px */
+  .page-eyebrow,
+  .page-meta,
+  .page-note,
+  .page-edu-label,
+  .page-edu-focus,
+  .page-edu-line,
+  .toc-num,
+  .toc-hints,
+  .toc-arrow,
+  .project-caption,
+  .book-badge,
+  .book-tags li,
+  .book-skill-group h3,
+  .book-skill-chips li,
+  .phil-num,
+  .phil-item p,
+  .learn-list,
+  .page-btn,
+  .summary-more {
+    font-size: 13px;
+  }
+
+  .toc-hints {
+    max-width: none;
   }
 
   .cover-title {
     font-size: clamp(40px, 15vw, 76px);
   }
 
-  .cover-tagline {
-    font-size: 12px;
+  .cover-eyebrow,
+  .cover-hint,
+  .cover-role,
+  .cover-close {
+    font-size: 13px;
+  }
+
+  .cover-tagline,
+  .cover-page--inside .cover-tagline {
+    font-size: 13px;
     max-width: 22ch;
   }
 
@@ -1167,7 +1345,7 @@
 
   .book-ctl {
     padding: 13px 22px;
-    font-size: 12px;
+    font-size: 13px;
     min-width: 104px;
     justify-content: center;
   }
@@ -1175,6 +1353,11 @@
   .book-counter {
     order: 0;
     flex: 1 1 100%;
+    font-size: 13px;
+  }
+
+  .plain-toggle {
+    font-size: 13px;
   }
 
   .toc-item {
@@ -1236,5 +1419,9 @@
   .page-btn,
   .toc-item {
     transition: none;
+  }
+
+  .book.is-turning .sheet-face::after {
+    animation: none;
   }
 }

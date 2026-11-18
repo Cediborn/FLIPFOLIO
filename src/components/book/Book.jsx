@@ -78,8 +78,54 @@ export default function Book({ onShowPlain }) {
   } = useBook()
 
   const bookRef = useRef(null)
+  const sceneRef = useRef(null)
+  const windowRef = useRef(null)
   const drag = useRef(null)
   const suppressClick = useRef(false)
+
+  // Warm the next spreads' screenshots while the browser is idle so a flip
+  // never lands on an empty frame.
+  useEffect(() => {
+    const warm = () => {
+      for (let i = flipped + 1; i <= Math.min(maxSpread, flipped + 2); i += 1) {
+        const leaf = leaves[i]
+        if (!leaf) continue
+        for (const page of [leaf.front, leaf.back]) {
+          const image = page?.type === 'projectImage' ? page.project.image : null
+          if (!image) continue
+          const preload = new Image()
+          preload.decoding = 'async'
+          preload.src = import.meta.env.BASE_URL + (image.webp || image.src)
+        }
+      }
+    }
+
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(warm, { timeout: 1500 })
+      : setTimeout(warm, 200)
+
+    return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle)
+      else clearTimeout(idle)
+    }
+  }, [flipped])
+
+  // Pointer tilt on the closed cover.
+  function handlePointerMove(event) {
+    if (flipped !== 0 || !sceneRef.current) return
+    const rect = event.currentTarget.getBoundingClientRect()
+    if (!rect.width || !rect.height) return
+    const x = (event.clientX - rect.left) / rect.width - 0.5
+    const y = (event.clientY - rect.top) / rect.height - 0.5
+    sceneRef.current.style.setProperty('--tilt-y', `${(x * 7).toFixed(2)}deg`)
+    sceneRef.current.style.setProperty('--tilt-x', `${(-y * 5).toFixed(2)}deg`)
+  }
+
+  function resetTilt() {
+    if (!sceneRef.current) return
+    sceneRef.current.style.setProperty('--tilt-x', '0deg')
+    sceneRef.current.style.setProperty('--tilt-y', '0deg')
+  }
 
   // Which half of the book is in view: a whole spread, or one page on mobile.
   const view = mobile ? (half === 1 ? 'left' : 'right') : flipped === 0 ? 'right' : 'spread'
@@ -100,6 +146,18 @@ export default function Book({ onShowPlain }) {
     }
 
     if (mobile) {
+      // Left third steps back, right third steps forward, the middle reads on.
+      const rect = windowRef.current?.getBoundingClientRect()
+      const x = rect?.width ? (event.clientX - rect.left) / rect.width : 0.5
+      if (x < 0.3) {
+        if (canPrev) prev()
+        return
+      }
+      if (x > 0.7) {
+        if (canNext) next()
+        else if (!isOpen) close()
+        return
+      }
       if (canNext) next()
       else if (!isOpen) close()
       return
@@ -141,8 +199,8 @@ export default function Book({ onShowPlain }) {
       <div className="book-stage">
         <div className="book-shadow" aria-hidden="true" />
 
-        <div className="book-window">
-          <div className="book-scene">
+        <div className="book-window" ref={windowRef}>
+          <div className="book-scene" ref={sceneRef}>
             <div
             ref={bookRef}
             className={`book${turning ? ' is-turning' : ''}${motion ? ` is-${motion}` : ''}`}
@@ -152,6 +210,8 @@ export default function Book({ onShowPlain }) {
             tabIndex={-1}
             onClick={handleClick}
             onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerLeave={resetTilt}
             onPointerUp={handlePointerUp}
             onPointerCancel={() => {
               drag.current = null
