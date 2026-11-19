@@ -824,6 +824,12 @@ p {
 
 .terminal-out {
   color: var(--text-faint);
+  white-space: pre-line;
+}
+
+.terminal-screen[data-typing="pending"] .terminal-block,
+.terminal-screen[data-typing="active"] .terminal-block:not(.is-visible) {
+  visibility: hidden;
 }
 
 .terminal-block--cursor {
@@ -848,18 +854,6 @@ p {
   49%,
   100% {
     opacity: 0;
-  }
-}
-
-.browser-wrap.visible .terminal-block {
-  animation: terminal-in 0.5s var(--ease) both;
-  animation-delay: calc(220ms + var(--line) * 90ms);
-}
-
-@keyframes terminal-in {
-  from {
-    opacity: 0;
-    transform: translateY(7px);
   }
 }
 

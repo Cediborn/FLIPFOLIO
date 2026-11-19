@@ -126,6 +126,118 @@
   }
 
   /* -------------------------------------------------------
+     Terminal typing
+     ------------------------------------------------------- */
+  const terminalScreen = doc.querySelector(".terminal-screen");
+  const terminalWrap = terminalScreen ? terminalScreen.closest(".browser-wrap") : null;
+  let terminalJobs = [];
+  let terminalRun = 0;
+  let terminalStarted = false;
+
+  function readTerminalText(node) {
+    let text = "";
+    node.childNodes.forEach((child) => {
+      text += child.nodeName === "BR" ? "\n" : child.textContent;
+    });
+    return text.trim();
+  }
+
+  if (terminalScreen) {
+    terminalJobs = Array.from(terminalScreen.querySelectorAll(".terminal-block")).map((block) => {
+      const command = block.querySelector(".terminal-command");
+      const output = block.querySelector(".terminal-out");
+      const commandText = command ? command.textContent.trim() : "";
+      const outputText = output ? readTerminalText(output) : "";
+
+      if (command) command.textContent = "";
+      if (output) output.textContent = "";
+
+      return { block, command, output, commandText, outputText };
+    });
+  }
+
+  function fillTerminal() {
+    if (!terminalScreen) return;
+    terminalJobs.forEach((job) => {
+      job.block.classList.add("is-visible");
+      if (job.command) job.command.textContent = job.commandText;
+      if (job.output) job.output.textContent = job.outputText;
+    });
+    terminalScreen.dataset.typing = "done";
+  }
+
+  function finishTerminal() {
+    if (!terminalScreen) return;
+    terminalStarted = true;
+    terminalRun += 1;
+    fillTerminal();
+  }
+
+  const terminalWait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+  async function typeTerminalText(element, text, run, speed) {
+    for (let index = 1; index <= text.length; index += 1) {
+      if (run !== terminalRun) return false;
+      element.textContent = text.slice(0, index);
+      const character = text[index - 1];
+      const beat = /[.,/]/.test(character) ? 60 : 0;
+      await terminalWait(speed + beat);
+    }
+    return run === terminalRun;
+  }
+
+  async function playTerminal() {
+    if (!terminalScreen || terminalStarted) return;
+    if (reduceMotion.matches) {
+      finishTerminal();
+      return;
+    }
+
+    terminalStarted = true;
+    terminalRun += 1;
+    const run = terminalRun;
+    terminalScreen.dataset.typing = "active";
+    await terminalWait(280);
+
+    for (const job of terminalJobs) {
+      if (run !== terminalRun) return;
+      job.block.classList.add("is-visible");
+
+      if (job.command) {
+        const typed = await typeTerminalText(job.command, job.commandText, run, 45);
+        if (!typed) return;
+        await terminalWait(130);
+      }
+
+      if (job.output) {
+        const typed = await typeTerminalText(job.output, job.outputText, run, 11);
+        if (!typed) return;
+        await terminalWait(210);
+      } else {
+        await terminalWait(180);
+      }
+    }
+
+    if (run === terminalRun) terminalScreen.dataset.typing = "done";
+  }
+
+  if (terminalScreen && terminalJobs.length) {
+    if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+      finishTerminal();
+    } else {
+      const terminalObserver = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          terminalObserver.disconnect();
+          window.setTimeout(playTerminal, 260);
+        },
+        { threshold: 0.3 }
+      );
+      terminalObserver.observe(terminalWrap || terminalScreen);
+    }
+  }
+
+  /* -------------------------------------------------------
      Hero mouse parallax
      ------------------------------------------------------- */
   const hero = doc.querySelector(".hero");
@@ -324,6 +436,7 @@
     setParallax();
     if (reduceMotion.matches) {
       revealItems.forEach((item) => item.classList.add("visible"));
+      finishTerminal();
     }
     onScroll();
   };

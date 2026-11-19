@@ -75,6 +75,10 @@
           opacity: 1 !important;
           transform: none !important;
         }
+
+        .terminal-screen[data-typing] .terminal-block {
+          visibility: visible !important;
+        }
       </style>
     </noscript>
 
@@ -231,7 +235,12 @@
                   <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
                   <span class="browser-url">cedi &mdash; bash</span>
                 </div>
-                <div class="terminal-screen">
+                <div
+                  class="terminal-screen"
+                  data-typing="pending"
+                  role="img"
+                  aria-label="Terminal profile for Cedi: CS student at the University of Ghana, level 100, building Blackout, Balancio, Bambi, Localens and Atlas."
+                >
                   <div class="terminal-block" style="--line: 0">
                     <p class="terminal-line">
                       <span class="terminal-prompt">~/cedi</span>
