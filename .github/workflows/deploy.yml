@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Copy the plain page
+        run: cp -R plain dist/plain
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
