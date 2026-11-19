@@ -1,7 +1,7 @@
 import { identity, links } from '../data/site.js'
 
 const LOG = [
-  { prompt: '~/cedi', cmd: 'whoami', out: 'cs student · univ. of ghana · level 100' },
+  { prompt: '~/cedi', cmd: 'whoami', out: 'cs student · univ. of ghana · level 200' },
   { prompt: '~/cedi', cmd: 'ls building/', out: 'blackout  balancio  bambi  locallens  atlas' },
   { prompt: '~/cedi', cmd: 'git status', out: 'shipping experiments. breaking things. fixing them.' },
 ]

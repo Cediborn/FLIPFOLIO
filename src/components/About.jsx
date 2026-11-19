@@ -25,8 +25,9 @@ export default function About() {
               </picture>
 
               <p className="about-lead">
-                I&rsquo;m a first-year Computer Science student at the University of Ghana who spends
-                a lot of time turning ideas into working software.
+                I&rsquo;m Damien Ntiamoah Adjei &mdash; Cedi for short &mdash; a second-year Computer Science
+                student at the University of Ghana who spends a lot of time turning ideas into
+                working software.
               </p>
             </div>
             <p>
