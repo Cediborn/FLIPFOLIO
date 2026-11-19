@@ -44,9 +44,9 @@ export default function BookControls({
             Close book
           </button>
         )}
-        <button type="button" className="book-ctl book-ctl--ghost" onClick={onShowPlain}>
+        <a className="book-ctl book-ctl--ghost" href="./plain/">
           View as plain page
-        </button>
+        </a>
       </div>
     </div>
   )
