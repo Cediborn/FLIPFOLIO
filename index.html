@@ -62,5 +62,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // GitHub Pages currently serves this branch root instead of the built
+      // artifact, so /src/main.jsx is raw JSX and the book cannot boot.
+      // Send visitors to the plain portfolio until Pages builds from Actions.
+      if (
+        location.hostname === "cediborn.github.io" &&
+        !document.querySelector('script[type="module"][src*="assets/"]')
+      ) {
+        location.replace("./plain/");
+      }
+    </script>
   </body>
 </html>
