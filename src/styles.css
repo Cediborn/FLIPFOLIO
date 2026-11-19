@@ -1440,6 +1440,21 @@ p {
 }
 
 /* real project screenshots */
+/*
+  <picture> carries no height of its own, so a percentage height on the
+  image inside resolves to auto and the frame letterboxes under the shot.
+  A definite height lets object-fit: cover fill the frame.
+*/
+.project-visual picture {
+  display: block;
+  height: 100%;
+}
+
+/* Only image cards take the capture ratio; the drawn SVG visuals stay 16/9. */
+.project-visual--shot {
+  aspect-ratio: 1280 / 585;
+}
+
 .project-visual img {
   width: 100%;
   height: 100%;

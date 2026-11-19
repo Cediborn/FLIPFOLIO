@@ -1197,9 +1197,20 @@ p {
   position: relative;
   flex: none;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
+  /* Matches the 1280x585 project captures, so the frame fills edge to edge. */
+  aspect-ratio: 1280 / 585;
   background: #0b0b0d;
   border-bottom: 1px solid var(--border-soft);
+}
+
+/*
+  <picture> is a block but carries no height of its own, so a percentage
+  height on the image inside resolves to auto and the frame letterboxes
+  under the shot. A definite height here lets object-fit: cover do its job
+  whatever ratio the image happens to be.
+*/
+.bento-media picture {
+  height: 100%;
 }
 
 .media-link {

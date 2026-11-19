@@ -132,7 +132,7 @@ export default function ProjectVisual({ project }) {
 
   if (image) {
     return (
-      <div className="project-visual">
+      <div className="project-visual project-visual--shot">
         <picture>
           {image.webp && <source srcSet={import.meta.env.BASE_URL + image.webp} type="image/webp" />}
           <img
