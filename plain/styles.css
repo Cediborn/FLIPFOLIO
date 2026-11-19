@@ -2082,9 +2082,10 @@ p {
   position: absolute;
   left: 50%;
   bottom: -2.5%;
-  z-index: 0;
+  z-index: 2;
   transform: translateX(-50%);
-  color: rgba(242, 241, 237, 0.035);
+  display: flex;
+  align-items: flex-end;
   font-family: var(--font-display);
   font-size: clamp(4.5rem, 20vw, 16rem);
   font-weight: 700;
@@ -2093,6 +2094,107 @@ p {
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
+
+  /* tune the wordmark here */
+  --wm-rest: rgba(242, 241, 237, 0.14);
+  --wm-hatch: rgba(242, 241, 237, 0.07);
+  --wm-acc: var(--accent, #e8a317);
+}
+
+/* Each letter lights on its own as the cursor crosses it. */
+.footer-watermark .wm-l {
+  position: relative;
+  display: block;
+  pointer-events: auto;
+  padding: 0 0.012em;
+  --hc: var(--wm-rest);
+  color: transparent;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--wm-hatch) 0 1.5px,
+    rgba(0, 0, 0, 0) 1.5px 7px
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 1.4px var(--wm-rest);
+  transition: -webkit-text-stroke-color 0.16s ease, filter 0.16s ease,
+    transform 0.18s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* selection rectangle */
+.footer-watermark .wm-l::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--hc);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+/* eight 7x7 handles, drawn from a single element */
+.footer-watermark .wm-l::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  background-image: linear-gradient(var(--hc), var(--hc)), linear-gradient(var(--hc), var(--hc)),
+    linear-gradient(var(--hc), var(--hc)), linear-gradient(var(--hc), var(--hc)),
+    linear-gradient(var(--hc), var(--hc)), linear-gradient(var(--hc), var(--hc)),
+    linear-gradient(var(--hc), var(--hc)), linear-gradient(var(--hc), var(--hc));
+  background-size: 7px 7px;
+  background-repeat: no-repeat;
+  background-position: left top, center top, right top, left center, right center, left bottom,
+    center bottom, right bottom;
+}
+
+.footer-watermark .wm-l:hover {
+  --hc: var(--wm-acc);
+  background-image: repeating-linear-gradient(
+    45deg,
+    color-mix(in srgb, var(--wm-acc) 52%, transparent) 0 1.6px,
+    rgba(0, 0, 0, 0) 1.6px 7px
+  );
+  -webkit-text-stroke-color: var(--wm-acc);
+  filter: drop-shadow(0 0 26px color-mix(in srgb, var(--wm-acc) 38%, transparent));
+  transform: translateY(-2px);
+}
+
+.footer-watermark .wm-l:hover::before,
+.footer-watermark .wm-l:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-watermark .wm-l {
+    transition: none;
+  }
+
+  .footer-watermark .wm-l:hover {
+    transform: none;
+  }
+}
+
+/*
+  The footer text paints above the wordmark but is transparent to the pointer,
+  so a hover anywhere over a letter reaches it while links stay clickable.
+*/
+.footer-inner,
+.footer-bottom {
+  position: relative;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.footer-inner a,
+.footer-inner button,
+.footer-brand p,
+.footer-bottom a,
+.footer-bottom small,
+.footer-bottom .footer-mark {
+  pointer-events: auto;
 }
 
 .footer-inner {

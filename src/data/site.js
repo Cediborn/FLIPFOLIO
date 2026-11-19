@@ -5,9 +5,7 @@
 
 export const identity = {
   name: 'Cedi',
-  // No surname was provided, so none is invented. Add one here if you want it
-  // shown in the footer / metadata.
-  fullName: 'Cedi', // TODO: e.g. 'Cedi Mensah' if you'd like a surname shown
+  fullName: 'Damien Ntiamoah Adjei',
   location: 'Ghana',
   role: 'Computer Science student & developer',
   tagline: 'I learn by building — and I build a lot.',
@@ -31,7 +29,7 @@ export const links = {
 export const education = {
   institution: 'University of Ghana',
   degree: 'BSc Computer Science',
-  level: 'Level 100',
+  level: 'Level 200',
   focus:
     'Computer Science fundamentals, programming, mathematics, statistics and software development.',
 }

@@ -31,9 +31,9 @@ export const projects = [
     image: {
       src: 'blackout.png',
       webp: 'blackout.webp',
-      width: 1914,
-      height: 874,
-      alt: 'Screenshot of the Blackout project',
+      width: 1280,
+      height: 585,
+      alt: 'BLACKOUT in play: a floodlit street football cage, two teams of three and the on-screen match controls',
     },
     featured: true,
   },
@@ -48,6 +48,13 @@ export const projects = [
     liveUrl: 'https://balancio-eta.vercel.app',
     githubUrl: null,
     visual: 'ledger',
+    image: {
+      src: 'balancio.png',
+      webp: 'balancio.webp',
+      width: 1280,
+      height: 585,
+      alt: 'Balancio home screen with a GH\u20B5235.00 balance and a plain-language expense box',
+    },
   },
   {
     id: 'bambi',
@@ -57,15 +64,15 @@ export const projects = [
     summary:
       'A teen growth and personal-development app with a companion feel. I\u2019m exploring how a product can feel supportive rather than clinical, with characters like Sora, Koda and Ziggy carrying the experience.',
     tags: ['Personal growth', 'Interactive experience', 'Characters'],
-    liveUrl: 'https://freebuff-two.vercel.app',
+    liveUrl: 'https://bambi-jam.vercel.app',
     githubUrl: null,
     visual: 'growth',
     image: {
       src: 'bambi.png',
       webp: 'bambi.webp',
-      width: 1890,
-      height: 883,
-      alt: 'Screenshot of the Bambi project',
+      width: 1280,
+      height: 585,
+      alt: 'Bambi Today screen with a daily quest, XP, day streak and level',
     },
   },
   {
@@ -82,9 +89,9 @@ export const projects = [
     image: {
       src: 'localens.png',
       webp: 'localens.webp',
-      width: 1917,
-      height: 871,
-      alt: 'Screenshot of the LocalLens project',
+      width: 1280,
+      height: 585,
+      alt: 'LocalLens landing screen with a find things near me button and OpenStreetMap badge',
     },
   },
   {

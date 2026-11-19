@@ -32,7 +32,7 @@ export function AboutPage() {
       <p className="page-lede">{identity.role}</p>
 
       <p className="page-body">
-        I&rsquo;m a first-year Computer Science student at the University of Ghana who spends a lot
+        I&rsquo;m a second-year Computer Science student at the University of Ghana who spends a lot
         of time turning ideas into working software.
       </p>
       <p className="page-body">
