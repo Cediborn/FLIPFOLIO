@@ -2085,6 +2085,8 @@ p {
   position: relative;
   overflow: hidden;
   padding-top: 84px;
+  /* Clear band at the bottom so the wordmark has space the text never covers. */
+  padding-bottom: clamp(96px, 14.6vw, 212px);
   border-top: 1px solid var(--border-soft);
   background: #08080a;
 }
@@ -2092,8 +2094,8 @@ p {
 .footer-watermark {
   position: absolute;
   left: 50%;
-  bottom: -2.5%;
-  z-index: 2;
+  bottom: clamp(10px, 1.4vw, 24px);
+  z-index: 0;
   transform: translateX(-50%);
   display: flex;
   align-items: flex-end;
@@ -2188,25 +2190,7 @@ p {
   }
 }
 
-/*
-  The footer text paints above the wordmark but is transparent to the pointer,
-  so a hover anywhere over a letter reaches it while links stay clickable.
-*/
-.footer-inner,
-.footer-bottom {
-  position: relative;
-  z-index: 3;
-  pointer-events: none;
-}
 
-.footer-inner a,
-.footer-inner button,
-.footer-brand p,
-.footer-bottom a,
-.footer-bottom small,
-.footer-bottom .footer-mark {
-  pointer-events: auto;
-}
 
 .footer-inner {
   position: relative;
