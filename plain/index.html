@@ -47,7 +47,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="preload" as="image" href="./blackout.webp" type="image/webp" />
+    <link rel="preload" as="image" href="./me.webp" type="image/webp" />
     <link rel="stylesheet" href="./styles.css" />
 
     <script type="application/ld+json">
@@ -226,31 +226,45 @@
 
           <div class="hero-visual">
             <div class="browser-wrap reveal" style="--delay: 180ms" data-parallax-speed="8">
-              <div class="browser-frame">
-                <div class="browser-bar">
+              <div class="browser-frame terminal-frame">
+                <div class="browser-bar terminal-bar">
                   <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-                  <span class="browser-url">blockout-mauve.vercel.app</span>
-                  <span class="browser-live"><span aria-hidden="true"></span>Live</span>
+                  <span class="browser-url">cedi &mdash; bash</span>
                 </div>
-                <div class="browser-screen">
-                  <a
-                    href="https://blockout-mauve.vercel.app"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    aria-label="Open the BLACKOUT live demo"
-                  >
-                    <picture>
-                      <source srcset="./blackout.webp" type="image/webp" />
-                      <img
-                        src="./blackout.webp"
-                        alt="Screenshot of the BLACKOUT street football game"
-                        width="1914"
-                        height="874"
-                        fetchpriority="high"
-                        decoding="async"
-                      />
-                    </picture>
-                  </a>
+                <div class="terminal-screen">
+                  <div class="terminal-block" style="--line: 0">
+                    <p class="terminal-line">
+                      <span class="terminal-prompt">~/cedi</span>
+                      <span class="terminal-command">whoami</span>
+                    </p>
+                    <p class="terminal-out">
+                      cs student &middot; univ. of ghana &middot; level 100
+                    </p>
+                  </div>
+                  <div class="terminal-block" style="--line: 1">
+                    <p class="terminal-line">
+                      <span class="terminal-prompt">~/cedi</span>
+                      <span class="terminal-command">ls building/</span>
+                    </p>
+                    <p class="terminal-out">
+                      blackout&nbsp;balancio&nbsp;bambi&nbsp;localens&nbsp;atlas
+                    </p>
+                  </div>
+                  <div class="terminal-block" style="--line: 2">
+                    <p class="terminal-line">
+                      <span class="terminal-prompt">~/cedi</span>
+                      <span class="terminal-command">git status</span>
+                    </p>
+                    <p class="terminal-out">
+                      shipping experiments. breaking things.<br />fixing them.
+                    </p>
+                  </div>
+                  <div class="terminal-block terminal-block--cursor" style="--line: 3">
+                    <p class="terminal-line">
+                      <span class="terminal-prompt">~/cedi</span>
+                      <span class="terminal-cursor" aria-hidden="true"></span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
