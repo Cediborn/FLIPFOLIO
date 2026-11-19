@@ -879,33 +879,28 @@ p {
 .float-portrait {
   top: -14px;
   right: -36px;
-  width: 168px;
-  padding: 7px 7px 9px;
-  border-radius: 16px;
-  background: var(--surface-2);
+  width: 176px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+  box-shadow: none;
   transform: translateY(var(--p-y, 0px));
   will-change: auto;
 }
 
 .float-portrait img {
+  display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 1;
   object-fit: cover;
   object-position: center;
-  border-radius: 10px;
+  border-radius: 22px;
   image-rendering: auto;
-}
-
-.float-portrait figcaption {
-  margin-top: 7px;
-  color: var(--text-dim);
-  font-family: var(--font-mono);
-  font-size: 0.55rem;
-  letter-spacing: 0.06em;
-  text-align: center;
 }
 
 .float-count {
@@ -2457,7 +2452,7 @@ p {
     top: -4px;
     right: 0;
     width: 124px;
-    padding: 6px 6px 7px;
+    padding: 0;
   }
 
   .float-portrait img {
@@ -2476,11 +2471,7 @@ p {
   }
 
   .terminal-block:nth-child(-n + 2) {
-    padding-right: 92px;
-  }
-
-  .float-portrait figcaption {
-    font-size: 0.48rem;
+    padding-right: 108px;
   }
 
   .float-count {
